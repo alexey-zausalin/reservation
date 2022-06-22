@@ -1,9 +1,6 @@
 package com.github.alexeyzausalin.reservation.api;
 
-import com.github.alexeyzausalin.reservation.domain.dto.HotelView;
-import com.github.alexeyzausalin.reservation.domain.dto.ListResponse;
-import com.github.alexeyzausalin.reservation.domain.dto.SearchHotelsQuery;
-import com.github.alexeyzausalin.reservation.domain.dto.SearchRequest;
+import com.github.alexeyzausalin.reservation.domain.dto.*;
 import com.github.alexeyzausalin.reservation.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -17,6 +14,21 @@ import javax.validation.Valid;
 public class HotelApi {
 
     private final HotelService hotelService;
+
+    @PostMapping
+    public HotelView create(@RequestBody @Valid EditHotelRequest request) {
+        return hotelService.create(request);
+    }
+
+    @PutMapping("{id}")
+    public HotelView edit(@PathVariable String id, @RequestBody @Valid EditHotelRequest request) {
+        return hotelService.update(new ObjectId(id), request);
+    }
+
+    @DeleteMapping("{id}")
+    public HotelView delete(@PathVariable String id) {
+        return hotelService.delete(new ObjectId(id));
+    }
 
     @GetMapping("{id}")
     public HotelView get(@PathVariable String id) {

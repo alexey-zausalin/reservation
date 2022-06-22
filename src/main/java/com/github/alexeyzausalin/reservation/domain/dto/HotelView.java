@@ -1,7 +1,20 @@
 package com.github.alexeyzausalin.reservation.domain.dto;
 
 public record HotelView(
-        String title,
-        String description
+
+        String id,
+
+        String pageUrl,
+
+        String name,
+        String amenities,
+
+        String city,
+        String address,
+
+        String latitude,
+        String longitude,
+
+        String hotelType
 ) {
 }
