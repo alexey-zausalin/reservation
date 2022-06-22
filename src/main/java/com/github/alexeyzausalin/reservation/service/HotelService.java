@@ -11,6 +11,7 @@ import com.github.alexeyzausalin.reservation.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class HotelService {
     private final HotelEditMapper hotelEditMapper;
     private final HotelViewMapper hotelViewMapper;
 
+    @Transactional
     public HotelView create(EditHotelRequest request) {
         Hotel hotel = hotelEditMapper.create(request);
 
@@ -30,6 +32,7 @@ public class HotelService {
         return hotelViewMapper.toHotelView(hotel);
     }
 
+    @Transactional
     public HotelView update(ObjectId id, EditHotelRequest request) {
         Hotel hotel = hotelRepository.getById(id);
         hotelEditMapper.update(request, hotel);
@@ -39,6 +42,7 @@ public class HotelService {
         return hotelViewMapper.toHotelView(hotel);
     }
 
+    @Transactional
     public HotelView delete(ObjectId id) {
         Hotel hotel = hotelRepository.getById(id);
 
