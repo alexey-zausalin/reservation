@@ -1,6 +1,6 @@
 package com.github.alexeyzausalin.reservation.domain.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public record HotelView(
 
@@ -11,8 +11,8 @@ public record HotelView(
         String name,
         String description,
 
-        Set<String> facilities,
-        Set<String> rules,
+        List<String> facilities,
+        List<String> rules,
 
         String address,
 

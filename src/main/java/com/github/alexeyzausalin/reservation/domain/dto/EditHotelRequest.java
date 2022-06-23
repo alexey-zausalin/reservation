@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
 
-import java.util.Set;
+import java.util.List;
 
 public record EditHotelRequest(
 
@@ -13,15 +13,15 @@ public record EditHotelRequest(
         @NotBlank String name,
         String description,
 
-        Set<String> facilities,
-        Set<String> rules,
+        List<String> facilities,
+        List<String> rules,
 
-        @NotBlank String address,
+        String address,
 
         String latitude,
         String longitude,
 
-        @NotBlank String hotelType
+        String hotelType
 ) {
 
     @Builder
