@@ -3,6 +3,7 @@ package com.github.alexeyzausalin.reservation.api.data;
 import com.github.alexeyzausalin.reservation.domain.dto.EditHotelRequest;
 import com.github.alexeyzausalin.reservation.domain.dto.HotelView;
 import com.github.alexeyzausalin.reservation.service.HotelService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +53,9 @@ public class HotelTestDataFactory {
             String address,
             String hotelType) {
         return createHotel(null, name, null, null, null, address, null, null, hotelType);
+    }
+
+    public void deleteHotel(String id) {
+        hotelService.delete(new ObjectId(id));
     }
 }
