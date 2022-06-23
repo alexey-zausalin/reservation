@@ -8,6 +8,8 @@ public record SearchHotelsQuery(
         LocalDateTime createdAtStart,
         LocalDateTime createdAtEnd,
 
-        String title
+        String name,
+
+        String hotelType
 ) {
 }

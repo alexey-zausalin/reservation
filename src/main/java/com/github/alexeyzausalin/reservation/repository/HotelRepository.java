@@ -57,8 +57,11 @@ class HotelRepositoryCustomImpl implements HotelRepositoryCustom {
         if (query.createdAtEnd() != null) {
             criteriaList.add(Criteria.where("createdAt").lt(query.createdAtEnd()));
         }
-        if (StringUtils.hasText(query.title())) {
-            criteriaList.add(Criteria.where("title").regex(query.title(), "i"));
+        if (StringUtils.hasText(query.name())) {
+            criteriaList.add(Criteria.where("name").regex(query.name(), "i"));
+        }
+        if (StringUtils.hasText(query.hotelType())) {
+            criteriaList.add(Criteria.where("hotelType").is(query.hotelType()));
         }
         if (!criteriaList.isEmpty()) {
             Criteria hotelCriteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));

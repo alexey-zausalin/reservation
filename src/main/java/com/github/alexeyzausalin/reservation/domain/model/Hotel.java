@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document(collection = "hotels")
 @Getter
@@ -24,20 +26,18 @@ public class Hotel extends ComparableEntity {
 
     private String pageUrl;
 
-    @NotBlank
+    @Indexed
     private String name;
-    private String amenities;
+    private String description;
 
-    @NotBlank
-    private String city;
-    @NotBlank
+    private Set<String> facilities = new HashSet<>();
+    private Set<String> rules = new HashSet<>();
+
     private String address;
 
-    @NotBlank
     private String latitude;
-    @NotBlank
     private String longitude;
 
-    @NotBlank
+    @Indexed
     private String hotelType;
 }

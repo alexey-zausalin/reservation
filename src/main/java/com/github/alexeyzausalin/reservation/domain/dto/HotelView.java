@@ -1,5 +1,7 @@
 package com.github.alexeyzausalin.reservation.domain.dto;
 
+import java.util.Set;
+
 public record HotelView(
 
         String id,
@@ -7,9 +9,11 @@ public record HotelView(
         String pageUrl,
 
         String name,
-        String amenities,
+        String description,
 
-        String city,
+        Set<String> facilities,
+        Set<String> rules,
+
         String address,
 
         String latitude,
