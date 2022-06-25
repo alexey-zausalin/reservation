@@ -2,12 +2,14 @@ package com.github.alexeyzausalin.reservation.api;
 
 import com.github.alexeyzausalin.reservation.domain.dto.*;
 import com.github.alexeyzausalin.reservation.service.FacilityService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Tag(name = "Facility")
 @RestController
 @RequestMapping("/api/v1/facilities")
 @RequiredArgsConstructor
