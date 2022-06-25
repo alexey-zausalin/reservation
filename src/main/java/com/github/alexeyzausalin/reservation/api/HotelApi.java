@@ -1,6 +1,7 @@
 package com.github.alexeyzausalin.reservation.api;
 
 import com.github.alexeyzausalin.reservation.domain.dto.*;
+import com.github.alexeyzausalin.reservation.service.FacilityService;
 import com.github.alexeyzausalin.reservation.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -14,6 +15,8 @@ import javax.validation.Valid;
 public class HotelApi {
 
     private final HotelService hotelService;
+
+    private final FacilityService facilityService;
 
     @PostMapping
     public HotelView create(@RequestBody @Valid EditHotelRequest request) {
@@ -35,8 +38,13 @@ public class HotelApi {
         return hotelService.getHotel(new ObjectId(id));
     }
 
+    @GetMapping("{id}/facilities")
+    public ListResponse<FacilityView> getFacilities(@PathVariable String id) {
+        return new ListResponse<>(facilityService.getHotelFacilities(new ObjectId(id)));
+    }
+
     @PostMapping("search")
     public ListResponse<HotelView> search(@RequestBody @Valid SearchRequest<SearchHotelsQuery> request) {
-        return new ListResponse<HotelView>(hotelService.searchHotels(request.page(), request.query()));
+        return new ListResponse<>(hotelService.searchHotels(request.page(), request.query()));
     }
 }

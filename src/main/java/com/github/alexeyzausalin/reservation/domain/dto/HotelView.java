@@ -11,7 +11,6 @@ public record HotelView(
         String name,
         String description,
 
-        List<String> facilities,
         List<String> rules,
 
         String address,

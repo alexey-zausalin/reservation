@@ -3,6 +3,7 @@ package com.github.alexeyzausalin.reservation.domain.dto;
 import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public record EditHotelRequest(
         @NotBlank String name,
         String description,
 
-        List<String> facilities,
+        List<@NotNull String> facilityIds,
         List<String> rules,
 
         String address,

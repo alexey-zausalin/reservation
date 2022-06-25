@@ -30,7 +30,7 @@ public class Hotel extends ComparableEntity {
     private String name;
     private String description;
 
-    private Set<String> facilities = new HashSet<>();
+    private Set<ObjectId> facilityIds = new HashSet<>();
     private Set<String> rules = new HashSet<>();
 
     private String address;

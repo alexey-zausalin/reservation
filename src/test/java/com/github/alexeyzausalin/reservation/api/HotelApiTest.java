@@ -1,9 +1,13 @@
 package com.github.alexeyzausalin.reservation.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.alexeyzausalin.reservation.api.data.FacilityTestDataFactory;
 import com.github.alexeyzausalin.reservation.api.data.HotelTestDataFactory;
 import com.github.alexeyzausalin.reservation.domain.dto.EditHotelRequest;
+import com.github.alexeyzausalin.reservation.domain.dto.FacilityView;
 import com.github.alexeyzausalin.reservation.domain.dto.HotelView;
+import com.github.alexeyzausalin.reservation.domain.dto.ListResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,16 +39,20 @@ public class HotelApiTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    HotelTestDataFactory hotelTestDataFactory;
+    private HotelTestDataFactory hotelTestDataFactory;
+
+    @Autowired
+    private FacilityTestDataFactory facilityTestDataFactory;
 
     @Test
     public void testCreateSuccess() throws Exception {
+        FacilityView facilityView = facilityTestDataFactory.createFacility("Internet", "WiFi is available in the hotel rooms and is free of charge.");
 
         EditHotelRequest goodRequest = new EditHotelRequest(
                 "https://www.bla-bla-bla.com/hotel/in/test-mock.html",
                 "Test mock Beach Huts",
                 "Lorem ipsum",
-                List.of("Free WiFi", "Airport shuttle", "Free parking", "Room service", "Restaurant", "Pets"),
+                List.of(facilityView.id()),
                 List.of("Don't smoke"),
                 "Agonda Beach,, 403702 Agonda, India",
                 "15.04399495",
@@ -196,5 +204,33 @@ public class HotelApiTest {
                 .perform(get(String.format("/api/v1/hotels/%s", "5f07c259ffb98843e36a2aa9")))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Entity Hotel with id 5f07c259ffb98843e36a2aa9 not found")));
+    }
+
+    @Test
+    public void testGetHotelFacilities() throws Exception {
+        FacilityView facilityView1 = facilityTestDataFactory.createFacility("Internet", "WiFi is available in the hotel rooms and is free of charge.");
+        FacilityView facilityView2 = facilityTestDataFactory.createFacility("Parking", "No parking available.");
+
+        HotelView hotelView = hotelTestDataFactory.createHotel(
+                "Test mock Beach Huts",
+                "Agonda Beach,, 403702 Agonda, India",
+                List.of(facilityView1.id(), facilityView2.id()),
+                "Bed and breakfasts"
+        );
+
+        MvcResult getFacilitiesResult = this.mockMvc
+                .perform(get(String.format("/api/v1/hotels/%s/facilities", hotelView.id())))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ListResponse<FacilityView> facilityViewList = fromJson(objectMapper,
+                getFacilitiesResult.getResponse().getContentAsString(),
+                new TypeReference<>() {
+                });
+
+        assertEquals(2, facilityViewList.items().size(), "Hotel must have 2 facilities");
+        assertEquals(facilityView1.name(), facilityViewList.items().get(0).name(), "Facility name mismatch!");
+        assertEquals(facilityView2.name(), facilityViewList.items().get(1).name(), "Facility name mismatch!");
+
     }
 }

@@ -55,6 +55,14 @@ public class HotelTestDataFactory {
         return createHotel(null, name, null, null, null, address, null, null, hotelType);
     }
 
+    public HotelView createHotel(
+            String name,
+            String address,
+            List<String> facilities,
+            String hotelType) {
+        return createHotel(null, name, null, facilities, null, address, null, null, hotelType);
+    }
+
     public void deleteHotel(String id) {
         hotelService.delete(new ObjectId(id));
     }
