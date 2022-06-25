@@ -3,6 +3,7 @@ package com.github.alexeyzausalin.reservation.api.data;
 import com.github.alexeyzausalin.reservation.domain.dto.EditFacilityRequest;
 import com.github.alexeyzausalin.reservation.domain.dto.FacilityView;
 import com.github.alexeyzausalin.reservation.service.FacilityService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,9 @@ public class FacilityTestDataFactory {
         assertEquals(name, facilityView.name(), "Facility name update isn't applied!");
 
         return facilityView;
+    }
+
+    public void deleteFacility(String id) {
+        facilityService.delete(new ObjectId(id));
     }
 }

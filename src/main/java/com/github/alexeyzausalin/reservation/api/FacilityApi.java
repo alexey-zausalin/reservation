@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/vi/facilities")
+@RequestMapping("/api/v1/facilities")
 @RequiredArgsConstructor
 public class FacilityApi {
 
