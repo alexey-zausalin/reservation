@@ -20,8 +20,15 @@ public class HotelApi {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'name' is required");
         }
 
-        int id = 1;
+        Long id = 1L;
         return String.format("{\"id\":\"%d\"}", id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        if (id == 0) {
+            throw new HotelNotFoundException();
+        }
     }
 
     @GetMapping("/{id}")

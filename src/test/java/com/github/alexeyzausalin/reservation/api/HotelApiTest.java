@@ -8,8 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +42,20 @@ public class HotelApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"Description of the hotel\"}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void givenExistedHotelId_whenDeleteHotel_shouldDeleteHotel() throws Exception {
+        this.mockMvc
+                .perform(delete("/api/v1/hotels/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNotExistedHotelId_whenDeleteHotel_shouldReturnNotFoundError() throws Exception {
+        this.mockMvc
+                .perform(delete("/api/v1/hotels/0"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
