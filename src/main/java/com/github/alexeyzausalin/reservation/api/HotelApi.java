@@ -24,6 +24,23 @@ public class HotelApi {
         return String.format("{\"id\":\"%d\"}", id);
     }
 
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, @RequestBody String newHotel) {
+        if (id == 0) {
+            throw new HotelNotFoundException();
+        }
+
+        Object obj = JSONValue.parse(newHotel);
+        JSONObject jsonObject = (JSONObject) obj;
+
+        String description = (String) jsonObject.getAsString("description");
+        if (description == null || description.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'description' is required");
+        }
+
+        return String.format("{\"id\":\"%d\",\"description\":%s}", id, description);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         if (id == 0) {

@@ -45,6 +45,35 @@ public class HotelApiTest {
     }
 
     @Test
+    public void givenExistedHotelIdWithNewHotel_whenUpdateHotel_shouldUpdateHotel() throws Exception {
+        this.mockMvc
+                .perform(put("/api/v1/hotels/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"description\":\"New description of the hotel\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("description").value("New description of the hotel"));
+    }
+
+    @Test
+    public void givenExistedHotelIdWithInvalidHotel_whenUpdateHotel_shouldReturnBadRequestError() throws Exception {
+        this.mockMvc
+                .perform(put("/api/v1/hotels/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void givenNotExistedHotelIdWithNewHotel_whenUpdateHotel_shouldReturnNotFoundError() throws Exception {
+        this.mockMvc
+                .perform(put("/api/v1/hotels/0")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"description\":\"New description of the hotel\"}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void givenExistedHotelId_whenDeleteHotel_shouldDeleteHotel() throws Exception {
         this.mockMvc
                 .perform(delete("/api/v1/hotels/1"))
