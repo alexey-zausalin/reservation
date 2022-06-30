@@ -78,9 +78,10 @@ public class HotelApiTest {
 
         mockMvc.perform(put(String.format("/api/v1/hotels/%s", id))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"description\":\"New description of the hotel\"}"))
+                        .content("{\"name\":\"New hotel name\",\"description\":\"New description of the hotel\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("name").value("New hotel name"))
                 .andExpect(jsonPath("description").value("New description of the hotel"));
     }
 
@@ -103,7 +104,7 @@ public class HotelApiTest {
     public void givenNotExistedHotelIdWithNewHotel_whenUpdateHotel_shouldReturnNotFoundError() throws Exception {
         mockMvc.perform(put("/api/v1/hotels/0")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"description\":\"New description of the hotel\"}"))
+                        .content("{\"name\":\"Hotel name\",\"description\":\"\"}"))
                 .andExpect(status().isNotFound());
     }
 

@@ -5,7 +5,8 @@ import com.github.alexeyzausalin.reservation.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/hotels")
@@ -19,22 +20,14 @@ public class HotelApi {
     }
 
     @PostMapping
-    public HotelDTO create(@RequestBody HotelDTO newHotel) {
-        if (newHotel.name() == null || newHotel.name().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'name' is required");
-        }
-
+    public HotelDTO create(@RequestBody @Valid HotelDTO newHotel) {
         return hotelService.createHotel(newHotel);
     }
 
     @PutMapping("/{id}")
-    public HotelDTO update(@PathVariable Long id, @RequestBody HotelDTO updateHotel) {
+    public HotelDTO update(@PathVariable Long id, @RequestBody @Valid HotelDTO updateHotel) {
         if (hotelService.getHotel(id) == null) {
             throw new HotelNotFoundException();
-        }
-
-        if (updateHotel.description() == null || updateHotel.description().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'description' is required");
         }
 
         return hotelService.updateHotel(id, updateHotel);

@@ -40,6 +40,7 @@ public class HotelServiceImpl implements HotelService {
             return null;
         }
 
+        hotel.setName(updateHotel.name());
         hotel.setDescription(updateHotel.description());
 
         hotel = hotelDAO.save(hotel);
