@@ -25,12 +25,7 @@ public class HotelServiceImpl implements HotelService {
 
         newHotel = hotelDAO.save(newHotel);
 
-        return HotelDTO
-                .builder()
-                .id(newHotel.getId())
-                .name(newHotel.getName())
-                .description(newHotel.getDescription())
-                .build();
+        return convertHotelEntityToHotelDTO(newHotel);
     }
 
     @Override
@@ -45,12 +40,7 @@ public class HotelServiceImpl implements HotelService {
 
         hotel = hotelDAO.save(hotel);
 
-        return HotelDTO
-                .builder()
-                .id(hotel.getId())
-                .name(hotel.getName())
-                .description(hotel.getDescription())
-                .build();
+        return convertHotelEntityToHotelDTO(hotel);
     }
 
     @Override
@@ -62,12 +52,7 @@ public class HotelServiceImpl implements HotelService {
 
         hotel = hotelDAO.delete(hotel);
 
-        return HotelDTO
-                .builder()
-                .id(hotel.getId())
-                .name(hotel.getName())
-                .description(hotel.getDescription())
-                .build();
+        return convertHotelEntityToHotelDTO(hotel);
     }
 
     @Override
@@ -77,11 +62,15 @@ public class HotelServiceImpl implements HotelService {
             return null;
         }
 
+        return convertHotelEntityToHotelDTO(hotel);
+    }
+
+    private HotelDTO convertHotelEntityToHotelDTO(Hotel hotelEntity) {
         return HotelDTO
                 .builder()
-                .id(hotel.getId())
-                .name(hotel.getName())
-                .description(hotel.getDescription())
+                .id(hotelEntity.getId())
+                .name(hotelEntity.getName())
+                .description(hotelEntity.getDescription())
                 .build();
     }
 }
