@@ -3,6 +3,7 @@ package com.github.alexeyzausalin.reservation.service;
 import com.github.alexeyzausalin.reservation.dao.HotelDAO;
 import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.entity.Hotel;
+import com.github.alexeyzausalin.reservation.mapper.HotelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,36 +12,37 @@ public class HotelServiceImpl implements HotelService {
 
     private final HotelDAO hotelDAO;
 
+    private final HotelMapper hotelMapper;
+
     @Autowired
-    public HotelServiceImpl(HotelDAO hotelDAO) {
+    public HotelServiceImpl(
+            HotelDAO hotelDAO,
+            HotelMapper hotelMapper) {
         this.hotelDAO = hotelDAO;
+        this.hotelMapper = hotelMapper;
     }
 
     @Override
-    public HotelDTO createHotel(HotelDTO hotel) {
+    public HotelDTO createHotel(HotelDTO newHotelDTO) {
         Hotel newHotel = new Hotel();
 
-        newHotel.setName(hotel.name());
-        newHotel.setDescription(hotel.description());
-
+        hotelMapper.update(newHotelDTO, newHotel);
         newHotel = hotelDAO.save(newHotel);
 
-        return convertHotelEntityToHotelDTO(newHotel);
+        return hotelMapper.toDTO(newHotel);
     }
 
     @Override
-    public HotelDTO updateHotel(Long id, HotelDTO updateHotel) {
+    public HotelDTO updateHotel(Long id, HotelDTO updateHotelDTO) {
         Hotel hotel = hotelDAO.getById(id);
         if (hotel == null) {
             return null;
         }
 
-        hotel.setName(updateHotel.name());
-        hotel.setDescription(updateHotel.description());
-
+        hotelMapper.update(updateHotelDTO, hotel);
         hotel = hotelDAO.save(hotel);
 
-        return convertHotelEntityToHotelDTO(hotel);
+        return hotelMapper.toDTO(hotel);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class HotelServiceImpl implements HotelService {
 
         hotel = hotelDAO.delete(hotel);
 
-        return convertHotelEntityToHotelDTO(hotel);
+        return hotelMapper.toDTO(hotel);
     }
 
     @Override
@@ -62,15 +64,6 @@ public class HotelServiceImpl implements HotelService {
             return null;
         }
 
-        return convertHotelEntityToHotelDTO(hotel);
-    }
-
-    private HotelDTO convertHotelEntityToHotelDTO(Hotel hotelEntity) {
-        return HotelDTO
-                .builder()
-                .id(hotelEntity.getId())
-                .name(hotelEntity.getName())
-                .description(hotelEntity.getDescription())
-                .build();
+        return hotelMapper.toDTO(hotel);
     }
 }
