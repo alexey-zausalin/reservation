@@ -1,9 +1,8 @@
 package com.github.alexeyzausalin.reservation.service;
 
 import com.github.alexeyzausalin.reservation.dao.HotelDAO;
+import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.entity.Hotel;
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,39 +17,43 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public String createHotel(String hotel) {
-        Object hotelObj = JSONValue.parse(hotel);
-        JSONObject hotelJsonObject = (JSONObject) hotelObj;
-
+    public HotelDTO createHotel(HotelDTO hotel) {
         Hotel newHotel = new Hotel();
 
-        newHotel.setName(hotelJsonObject.getAsString("name"));
-        newHotel.setDescription(hotelJsonObject.getAsString("description"));
+        newHotel.setName(hotel.name());
+        newHotel.setDescription(hotel.description());
 
         newHotel = hotelDAO.save(newHotel);
 
-        return newHotel.toString();
+        return HotelDTO
+                .builder()
+                .id(newHotel.getId())
+                .name(newHotel.getName())
+                .description(newHotel.getDescription())
+                .build();
     }
 
     @Override
-    public String updateHotel(Long id, String updateHotel) {
+    public HotelDTO updateHotel(Long id, HotelDTO updateHotel) {
         Hotel hotel = hotelDAO.getById(id);
         if (hotel == null) {
             return null;
         }
 
-        Object updateHotelObj = JSONValue.parse(updateHotel);
-        JSONObject updateHotelJsonObject = (JSONObject) updateHotelObj;
-
-        hotel.setDescription(updateHotelJsonObject.getAsString("description"));
+        hotel.setDescription(updateHotel.description());
 
         hotel = hotelDAO.save(hotel);
 
-        return hotel.toString();
+        return HotelDTO
+                .builder()
+                .id(hotel.getId())
+                .name(hotel.getName())
+                .description(hotel.getDescription())
+                .build();
     }
 
     @Override
-    public String deleteHotel(Long id) {
+    public HotelDTO deleteHotel(Long id) {
         Hotel hotel = hotelDAO.getById(id);
         if (hotel == null) {
             return null;
@@ -58,16 +61,26 @@ public class HotelServiceImpl implements HotelService {
 
         hotel = hotelDAO.delete(hotel);
 
-        return hotel.toString();
+        return HotelDTO
+                .builder()
+                .id(hotel.getId())
+                .name(hotel.getName())
+                .description(hotel.getDescription())
+                .build();
     }
 
     @Override
-    public String getHotel(Long id) {
+    public HotelDTO getHotel(Long id) {
         Hotel hotel = hotelDAO.getById(id);
         if (hotel == null) {
             return null;
         }
 
-        return hotel.toString();
+        return HotelDTO
+                .builder()
+                .id(hotel.getId())
+                .name(hotel.getName())
+                .description(hotel.getDescription())
+                .build();
     }
 }

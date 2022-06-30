@@ -1,8 +1,7 @@
 package com.github.alexeyzausalin.reservation.api;
 
+import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.service.HotelService;
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +19,8 @@ public class HotelApi {
     }
 
     @PostMapping
-    public String create(@RequestBody String newHotel) {
-        Object newHotelObj = JSONValue.parse(newHotel);
-        JSONObject newHotelJsonObject = (JSONObject) newHotelObj;
-
-        String name = newHotelJsonObject.getAsString("name");
-        if (name == null || name.isBlank()) {
+    public HotelDTO create(@RequestBody HotelDTO newHotel) {
+        if (newHotel.name() == null || newHotel.name().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'name' is required");
         }
 
@@ -33,17 +28,12 @@ public class HotelApi {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, @RequestBody String updateHotel) {
-        String hotel = hotelService.getHotel(id);
-        if (hotel == null) {
+    public HotelDTO update(@PathVariable Long id, @RequestBody HotelDTO updateHotel) {
+        if (hotelService.getHotel(id) == null) {
             throw new HotelNotFoundException();
         }
 
-        Object updateHotelObj = JSONValue.parse(updateHotel);
-        JSONObject updateHotelJsonObject = (JSONObject) updateHotelObj;
-
-        String description = updateHotelJsonObject.getAsString("description");
-        if (description == null || description.isBlank()) {
+        if (updateHotel.description() == null || updateHotel.description().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'description' is required");
         }
 
@@ -58,8 +48,8 @@ public class HotelApi {
     }
 
     @GetMapping("/{id}")
-    public String getHotel(@PathVariable Long id) {
-        String hotel = hotelService.getHotel(id);
+    public HotelDTO getHotel(@PathVariable Long id) {
+        HotelDTO hotel = hotelService.getHotel(id);
         if (hotel == null) {
             throw new HotelNotFoundException();
         }

@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 @NoArgsConstructor
 public class Hotel {
 
@@ -13,12 +14,4 @@ public class Hotel {
     private String name;
 
     private String description;
-
-    public String toString() {
-        if (id == null) {
-            return String.format("{\"name\":\"%s\",\"description\":\"%s\"}", name, description);
-        }
-
-        return String.format("{\"id\":\"%d\",\"name\":\"%s\",\"description\":\"%s\"}", id, name, description);
-    }
 }

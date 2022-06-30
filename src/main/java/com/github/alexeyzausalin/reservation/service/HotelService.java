@@ -1,12 +1,14 @@
 package com.github.alexeyzausalin.reservation.service;
 
+import com.github.alexeyzausalin.reservation.dto.HotelDTO;
+
 public interface HotelService {
 
-    String createHotel(String hotel);
+    HotelDTO createHotel(HotelDTO hotel);
 
-    String updateHotel(Long id, String updateHotel);
+    HotelDTO updateHotel(Long id, HotelDTO updateHotel);
 
-    String deleteHotel(Long id);
+    HotelDTO deleteHotel(Long id);
 
-    String getHotel(Long id);
+    HotelDTO getHotel(Long id);
 }

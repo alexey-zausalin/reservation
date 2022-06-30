@@ -1,8 +1,9 @@
 package com.github.alexeyzausalin.reservation.api.data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.service.HotelService;
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,26 +14,28 @@ public class HotelTestDataFactory {
 
     private final HotelService hotelService;
 
+    private final ObjectMapper objectMapper;
+
     @Autowired
-    public HotelTestDataFactory(HotelService hotelService) {
+    public HotelTestDataFactory(
+            HotelService hotelService,
+            ObjectMapper objectMapper) {
         this.hotelService = hotelService;
+        this.objectMapper = objectMapper;
     }
 
-    public String create(String name, String description) {
-        String hotelRequest = String.format("{\"name\":\"%s\",\"description\":\"%s\"}", name, description);
+    public String create(String name, String description) throws JsonProcessingException {
+        HotelDTO hotelRequest = HotelDTO
+                .builder()
+                .name(name)
+                .description(description)
+                .build();
 
-        String hotelView = hotelService.createHotel(hotelRequest);
+        HotelDTO hotelResponse = hotelService.createHotel(hotelRequest);
 
-        assertNotNull(hotelView, "Hotel result must not be null!");
+        assertNotNull(hotelResponse, "Hotel result must not be null!");
+        assertNotNull(hotelResponse.id(), "Hotel id must not be null!");
 
-        Object obj = JSONValue.parse(hotelView);
-        JSONObject jsonObject = (JSONObject) obj;
-
-        Long id = Long.parseLong(jsonObject.getAsString("id"));
-
-        assertNotNull(id, "Hotel id must not be null!");
-
-        return hotelView;
-
+        return objectMapper.writeValueAsString(hotelResponse);
     }
 }
