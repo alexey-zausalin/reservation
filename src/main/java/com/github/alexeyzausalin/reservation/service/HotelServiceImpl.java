@@ -6,6 +6,7 @@ import com.github.alexeyzausalin.reservation.entity.Hotel;
 import com.github.alexeyzausalin.reservation.mapper.HotelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("hotelService")
 public class HotelServiceImpl implements HotelService {
@@ -23,6 +24,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    @Transactional
     public HotelDTO createHotel(HotelDTO newHotelDTO) {
         Hotel newHotel = new Hotel();
 
@@ -33,6 +35,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    @Transactional
     public HotelDTO updateHotel(Long id, HotelDTO updateHotelDTO) {
         Hotel hotel = hotelRepository.getById(id);
 
@@ -43,6 +46,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    @Transactional
     public HotelDTO deleteHotel(Long id) {
         Hotel hotel = hotelRepository.getById(id);
 
