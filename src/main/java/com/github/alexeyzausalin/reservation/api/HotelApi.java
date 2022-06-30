@@ -26,28 +26,17 @@ public class HotelApi {
 
     @PutMapping("/{id}")
     public HotelDTO update(@PathVariable Long id, @RequestBody @Valid HotelDTO updateHotel) {
-        if (hotelService.getHotel(id) == null) {
-            throw new HotelNotFoundException();
-        }
-
         return hotelService.updateHotel(id, updateHotel);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        if (hotelService.deleteHotel(id) == null) {
-            throw new HotelNotFoundException();
-        }
+        hotelService.deleteHotel(id);
     }
 
     @GetMapping("/{id}")
     public HotelDTO getHotel(@PathVariable Long id) {
-        HotelDTO hotel = hotelService.getHotel(id);
-        if (hotel == null) {
-            throw new HotelNotFoundException();
-        }
-
-        return hotel;
+        return hotelService.getHotel(id);
     }
 
     @ExceptionHandler

@@ -1,6 +1,6 @@
 package com.github.alexeyzausalin.reservation.service;
 
-import com.github.alexeyzausalin.reservation.dao.HotelDAO;
+import com.github.alexeyzausalin.reservation.repository.HotelRepository;
 import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.entity.Hotel;
 import com.github.alexeyzausalin.reservation.mapper.HotelMapper;
@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service("hotelService")
 public class HotelServiceImpl implements HotelService {
 
-    private final HotelDAO hotelDAO;
+    private final HotelRepository hotelRepository;
 
     private final HotelMapper hotelMapper;
 
     @Autowired
     public HotelServiceImpl(
-            HotelDAO hotelDAO,
+            HotelRepository hotelRepository,
             HotelMapper hotelMapper) {
-        this.hotelDAO = hotelDAO;
+        this.hotelRepository = hotelRepository;
         this.hotelMapper = hotelMapper;
     }
 
@@ -27,42 +27,33 @@ public class HotelServiceImpl implements HotelService {
         Hotel newHotel = new Hotel();
 
         hotelMapper.update(newHotelDTO, newHotel);
-        newHotel = hotelDAO.save(newHotel);
+        newHotel = hotelRepository.save(newHotel);
 
         return hotelMapper.toDTO(newHotel);
     }
 
     @Override
     public HotelDTO updateHotel(Long id, HotelDTO updateHotelDTO) {
-        Hotel hotel = hotelDAO.getById(id);
-        if (hotel == null) {
-            return null;
-        }
+        Hotel hotel = hotelRepository.getById(id);
 
         hotelMapper.update(updateHotelDTO, hotel);
-        hotel = hotelDAO.save(hotel);
+        hotel = hotelRepository.save(hotel);
 
         return hotelMapper.toDTO(hotel);
     }
 
     @Override
     public HotelDTO deleteHotel(Long id) {
-        Hotel hotel = hotelDAO.getById(id);
-        if (hotel == null) {
-            return null;
-        }
+        Hotel hotel = hotelRepository.getById(id);
 
-        hotel = hotelDAO.delete(hotel);
+        hotelRepository.delete(hotel);
 
         return hotelMapper.toDTO(hotel);
     }
 
     @Override
     public HotelDTO getHotel(Long id) {
-        Hotel hotel = hotelDAO.getById(id);
-        if (hotel == null) {
-            return null;
-        }
+        Hotel hotel = hotelRepository.getById(id);
 
         return hotelMapper.toDTO(hotel);
     }
