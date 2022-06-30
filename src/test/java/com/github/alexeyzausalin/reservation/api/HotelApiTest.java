@@ -33,7 +33,7 @@ public class HotelApiTest {
 
     @Test
     public void givenNewHotel_whenCreateHotel_shouldCreateNewHotel() throws Exception {
-        MvcResult createHotelResult = this.mockMvc
+        MvcResult createHotelResult = mockMvc
                 .perform(post("/api/v1/hotels")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Hotel name\",\"description\":\"Description of the hotel\"}"))
@@ -50,21 +50,18 @@ public class HotelApiTest {
 
         Long id = Long.parseLong(jsonObject.getAsString("id"));
 
-        this.mockMvc
-                .perform(get(String.format("/api/v1/hotels/%s", id)))
+        mockMvc.perform(get(String.format("/api/v1/hotels/%s", id)))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void givenInvalidNewHotel_whenCreateHotel_shouldReturnBadRequestError() throws Exception {
-        this.mockMvc
-                .perform(post("/api/v1/hotels")
+        mockMvc.perform(post("/api/v1/hotels")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"description\":\"Description of the hotel\"}"))
                 .andExpect(status().isBadRequest());
 
-        this.mockMvc
-                .perform(post("/api/v1/hotels")
+        mockMvc.perform(post("/api/v1/hotels")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"Description of the hotel\"}"))
                 .andExpect(status().isBadRequest());
@@ -72,15 +69,14 @@ public class HotelApiTest {
 
     @Test
     public void givenExistedHotelIdWithNewHotel_whenUpdateHotel_shouldUpdateHotel() throws Exception {
-        String hotel = this.hotelTestDataFactory.create("Hotel name", "Description of the hotel");
+        String hotel = hotelTestDataFactory.create("Hotel name", "Description of the hotel");
 
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
         Long id = Long.parseLong(jsonObject.getAsString("id"));
 
-        this.mockMvc
-                .perform(put(String.format("/api/v1/hotels/%s", id))
+        mockMvc.perform(put(String.format("/api/v1/hotels/%s", id))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"New description of the hotel\"}"))
                 .andExpect(status().isOk())
@@ -90,15 +86,14 @@ public class HotelApiTest {
 
     @Test
     public void givenExistedHotelIdWithInvalidHotel_whenUpdateHotel_shouldReturnBadRequestError() throws Exception {
-        String hotel = this.hotelTestDataFactory.create("Hotel name", "Description of the hotel");
+        String hotel = hotelTestDataFactory.create("Hotel name", "Description of the hotel");
 
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
         Long id = Long.parseLong(jsonObject.getAsString("id"));
 
-        this.mockMvc
-                .perform(put(String.format("/api/v1/hotels/%s", id))
+        mockMvc.perform(put(String.format("/api/v1/hotels/%s", id))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isBadRequest());
@@ -106,8 +101,7 @@ public class HotelApiTest {
 
     @Test
     public void givenNotExistedHotelIdWithNewHotel_whenUpdateHotel_shouldReturnNotFoundError() throws Exception {
-        this.mockMvc
-                .perform(put("/api/v1/hotels/0")
+        mockMvc.perform(put("/api/v1/hotels/0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"New description of the hotel\"}"))
                 .andExpect(status().isNotFound());
@@ -115,40 +109,36 @@ public class HotelApiTest {
 
     @Test
     public void givenExistedHotelId_whenDeleteHotel_shouldDeleteHotel() throws Exception {
-        String hotel = this.hotelTestDataFactory.create("Hotel name", "Description of the hotel");
+        String hotel = hotelTestDataFactory.create("Hotel name", "Description of the hotel");
 
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
         Long id = Long.parseLong(jsonObject.getAsString("id"));
 
-        this.mockMvc
-                .perform(delete(String.format("/api/v1/hotels/%s", id)))
+        mockMvc.perform(delete(String.format("/api/v1/hotels/%s", id)))
                 .andExpect(status().isOk());
 
-        this.mockMvc
-                .perform(get(String.format("/api/v1/hotels/%s", id)))
+        mockMvc.perform(get(String.format("/api/v1/hotels/%s", id)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void givenNotExistedHotelId_whenDeleteHotel_shouldReturnNotFoundError() throws Exception {
-        this.mockMvc
-                .perform(delete("/api/v1/hotels/0"))
+        mockMvc.perform(delete("/api/v1/hotels/0"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void givenExistedHotelId_whenGetHotel_shouldReturnHotel() throws Exception {
-        String hotel = this.hotelTestDataFactory.create("Hotel name", "Description of the hotel");
+        String hotel = hotelTestDataFactory.create("Hotel name", "Description of the hotel");
 
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
         Long id = Long.parseLong(jsonObject.getAsString("id"));
 
-        this.mockMvc
-                .perform(get(String.format("/api/v1/hotels/%s", id)))
+        mockMvc.perform(get(String.format("/api/v1/hotels/%s", id)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(id))
                 .andExpect(jsonPath("name").value("Hotel name"))
@@ -157,8 +147,7 @@ public class HotelApiTest {
 
     @Test
     public void givenNotExistedHotelId_whenGetHotel_shouldReturnNotFoundError() throws Exception {
-        this.mockMvc
-                .perform(get("/api/v1/hotels/0"))
+        mockMvc.perform(get("/api/v1/hotels/0"))
                 .andExpect(status().isNotFound());
     }
 }
