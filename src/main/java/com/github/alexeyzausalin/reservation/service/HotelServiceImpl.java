@@ -1,63 +1,73 @@
 package com.github.alexeyzausalin.reservation.service;
 
+import com.github.alexeyzausalin.reservation.dao.HotelDAO;
+import com.github.alexeyzausalin.reservation.entity.Hotel;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service("hotelService")
 public class HotelServiceImpl implements HotelService {
 
-    private final AtomicLong counter = new AtomicLong();
+    private final HotelDAO hotelDAO;
 
-    private final Map<Long, String> hotels = new HashMap<>();
+    @Autowired
+    public HotelServiceImpl(HotelDAO hotelDAO) {
+        this.hotelDAO = hotelDAO;
+    }
 
     @Override
     public String createHotel(String hotel) {
-        Long newId = counter.incrementAndGet();
-
         Object hotelObj = JSONValue.parse(hotel);
         JSONObject hotelJsonObject = (JSONObject) hotelObj;
 
-        String newHotel = String.format(
-                "{\"id\":\"%d\",\"name\":\"%s\",\"description\":\"%s\"}",
-                newId,
-                hotelJsonObject.getAsString("name"),
-                hotelJsonObject.getAsString("description"));
+        Hotel newHotel = new Hotel();
 
-        hotels.put(newId, newHotel);
+        newHotel.setName(hotelJsonObject.getAsString("name"));
+        newHotel.setDescription(hotelJsonObject.getAsString("description"));
 
-        return newHotel;
+        newHotel = hotelDAO.save(newHotel);
+
+        return newHotel.toString();
     }
 
     @Override
     public String updateHotel(Long id, String updateHotel) {
-        String hotel = hotels.get(id);
-
-        Object hotelObj = JSONValue.parse(hotel);
-        JSONObject hotelJsonObject = (JSONObject) hotelObj;
+        Hotel hotel = hotelDAO.getById(id);
+        if (hotel == null) {
+            return null;
+        }
 
         Object updateHotelObj = JSONValue.parse(updateHotel);
         JSONObject updateHotelJsonObject = (JSONObject) updateHotelObj;
 
-        hotelJsonObject.put("description", updateHotelJsonObject.getAsString("description"));
-        hotel = hotelJsonObject.toString();
+        hotel.setDescription(updateHotelJsonObject.getAsString("description"));
 
-        hotels.put(id, hotel);
+        hotel = hotelDAO.save(hotel);
 
-        return hotel;
+        return hotel.toString();
     }
 
     @Override
     public String deleteHotel(Long id) {
-        return hotels.remove(id);
+        Hotel hotel = hotelDAO.getById(id);
+        if (hotel == null) {
+            return null;
+        }
+
+        hotel = hotelDAO.delete(hotel);
+
+        return hotel.toString();
     }
 
     @Override
     public String getHotel(Long id) {
-        return hotels.get(id);
+        Hotel hotel = hotelDAO.getById(id);
+        if (hotel == null) {
+            return null;
+        }
+
+        return hotel.toString();
     }
 }
