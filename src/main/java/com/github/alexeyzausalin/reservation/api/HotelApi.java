@@ -1,7 +1,9 @@
 package com.github.alexeyzausalin.reservation.api;
 
+import com.github.alexeyzausalin.reservation.service.HotelService;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,51 +12,59 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/v1/hotels")
 public class HotelApi {
 
+    private final HotelService hotelService;
+
+    @Autowired
+    public HotelApi(HotelService hotelService) {
+        this.hotelService = hotelService;
+    }
+
     @PostMapping
     public String create(@RequestBody String newHotel) {
-        Object obj = JSONValue.parse(newHotel);
-        JSONObject jsonObject = (JSONObject) obj;
+        Object newHotelObj = JSONValue.parse(newHotel);
+        JSONObject newHotelJsonObject = (JSONObject) newHotelObj;
 
-        String name = (String) jsonObject.getAsString("name");
+        String name = newHotelJsonObject.getAsString("name");
         if (name == null || name.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'name' is required");
         }
 
-        Long id = 1L;
-        return String.format("{\"id\":\"%d\"}", id);
+        return hotelService.createHotel(newHotel);
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, @RequestBody String newHotel) {
-        if (id == 0) {
+    public String update(@PathVariable Long id, @RequestBody String updateHotel) {
+        String hotel = hotelService.getHotel(id);
+        if (hotel == null) {
             throw new HotelNotFoundException();
         }
 
-        Object obj = JSONValue.parse(newHotel);
-        JSONObject jsonObject = (JSONObject) obj;
+        Object updateHotelObj = JSONValue.parse(updateHotel);
+        JSONObject updateHotelJsonObject = (JSONObject) updateHotelObj;
 
-        String description = (String) jsonObject.getAsString("description");
+        String description = updateHotelJsonObject.getAsString("description");
         if (description == null || description.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not empty 'description' is required");
         }
 
-        return String.format("{\"id\":\"%d\",\"description\":%s}", id, description);
+        return hotelService.updateHotel(id, updateHotel);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        if (id == 0) {
+        if (hotelService.deleteHotel(id) == null) {
             throw new HotelNotFoundException();
         }
     }
 
     @GetMapping("/{id}")
     public String getHotel(@PathVariable Long id) {
-        if (id == 0) {
+        String hotel = hotelService.getHotel(id);
+        if (hotel == null) {
             throw new HotelNotFoundException();
         }
 
-        return String.format("{\"id\":\"%d\"}", id);
+        return hotel;
     }
 
     @ExceptionHandler

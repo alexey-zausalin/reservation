@@ -48,7 +48,7 @@ public class HotelApiTest {
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
-        Long id = Long.getLong(jsonObject.getAsString("id"));
+        Long id = Long.parseLong(jsonObject.getAsString("id"));
 
         this.mockMvc
                 .perform(get(String.format("/api/v1/hotels/%s", id)))
@@ -77,13 +77,14 @@ public class HotelApiTest {
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
-        Long id = Long.getLong(jsonObject.getAsString("id"));
+        Long id = Long.parseLong(jsonObject.getAsString("id"));
 
         this.mockMvc
                 .perform(put(String.format("/api/v1/hotels/%s", id))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"New description of the hotel\"}"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
                 .andExpect(jsonPath("description").value("New description of the hotel"));
     }
 
@@ -94,7 +95,7 @@ public class HotelApiTest {
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
-        Long id = Long.getLong(jsonObject.getAsString("id"));
+        Long id = Long.parseLong(jsonObject.getAsString("id"));
 
         this.mockMvc
                 .perform(put(String.format("/api/v1/hotels/%s", id))
@@ -119,7 +120,7 @@ public class HotelApiTest {
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
-        Long id = Long.getLong(jsonObject.getAsString("id"));
+        Long id = Long.parseLong(jsonObject.getAsString("id"));
 
         this.mockMvc
                 .perform(delete(String.format("/api/v1/hotels/%s", id)))
@@ -144,7 +145,7 @@ public class HotelApiTest {
         Object obj = JSONValue.parse(hotel);
         JSONObject jsonObject = (JSONObject) obj;
 
-        Long id = Long.getLong(jsonObject.getAsString("id"));
+        Long id = Long.parseLong(jsonObject.getAsString("id"));
 
         this.mockMvc
                 .perform(get(String.format("/api/v1/hotels/%s", id)))
