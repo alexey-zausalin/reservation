@@ -3,7 +3,6 @@ package com.github.alexeyzausalin.reservation.api;
 import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 import com.github.alexeyzausalin.reservation.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,11 +36,5 @@ public class HotelApi {
     @GetMapping("/{id}")
     public HotelDTO getHotel(@PathVariable Long id) {
         return hotelService.getHotel(id);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    private void hotelNotFoundHandler(HotelNotFoundException exception) {
-
     }
 }
