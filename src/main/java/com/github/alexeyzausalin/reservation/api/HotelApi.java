@@ -1,6 +1,9 @@
 package com.github.alexeyzausalin.reservation.api;
 
+import com.github.alexeyzausalin.reservation.dto.FacilityDTO;
 import com.github.alexeyzausalin.reservation.dto.HotelDTO;
+import com.github.alexeyzausalin.reservation.dto.ListResponseDTO;
+import com.github.alexeyzausalin.reservation.service.FacilityService;
 import com.github.alexeyzausalin.reservation.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +16,14 @@ public class HotelApi {
 
     private final HotelService hotelService;
 
+    private final FacilityService facilityService;
+
     @Autowired
-    public HotelApi(HotelService hotelService) {
+    public HotelApi(
+            HotelService hotelService,
+            FacilityService facilityService) {
         this.hotelService = hotelService;
+        this.facilityService = facilityService;
     }
 
     @PostMapping
@@ -36,5 +44,10 @@ public class HotelApi {
     @GetMapping("/{id}")
     public HotelDTO getHotel(@PathVariable Long id) {
         return hotelService.getHotel(id);
+    }
+
+    @GetMapping("/{id}/facilities")
+    public ListResponseDTO<FacilityDTO> getFacilities(@PathVariable Long id) {
+        return new ListResponseDTO<>(facilityService.getHotelFacilities(id));
     }
 }

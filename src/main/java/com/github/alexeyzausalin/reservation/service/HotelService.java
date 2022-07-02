@@ -4,9 +4,9 @@ import com.github.alexeyzausalin.reservation.dto.HotelDTO;
 
 public interface HotelService {
 
-    HotelDTO createHotel(HotelDTO hotel);
+    HotelDTO createHotel(HotelDTO newHotelDTO);
 
-    HotelDTO updateHotel(Long id, HotelDTO updateHotel);
+    HotelDTO updateHotel(Long id, HotelDTO updateHotelDTO);
 
     HotelDTO deleteHotel(Long id);
 

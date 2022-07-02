@@ -7,6 +7,8 @@ import com.github.alexeyzausalin.reservation.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Service
@@ -25,10 +27,15 @@ public class HotelTestDataFactory {
     }
 
     public String create(String name, String description) throws JsonProcessingException {
+        return create(name, description, List.of());
+    }
+
+    public String create(String name, String description, List<Long> facilityIds) throws JsonProcessingException {
         HotelDTO hotelRequest = HotelDTO
                 .builder()
                 .name(name)
                 .description(description)
+                .facilityIds(facilityIds)
                 .build();
 
         HotelDTO hotelResponse = hotelService.createHotel(hotelRequest);

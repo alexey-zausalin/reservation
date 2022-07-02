@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public record HotelDTO(
         Long id,
@@ -12,7 +13,9 @@ public record HotelDTO(
         String name,
 
         @NotNull
-        String description) {
+        String description,
+
+        List<@NotNull Long> facilityIds) {
 
     @Builder
     public HotelDTO {
